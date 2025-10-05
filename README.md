@@ -3,7 +3,7 @@
 Proyecto reproducible en Python/Jupyter para estudiar análisis espectral, filtrado y compresión por poda de coeficientes (α-pruning) en 2D.
 
 ## Nota para la profesora
-Profe, se que no recibes sin tener grupo, tal vez este trabajo esta un poco desorganizado, pero le pido perdón por tomarle mucho tiempo, tuve problemas con mi grupito, por lo que estoy trabajando solo, por eso me costo tanto este proyecto, sin embargo le pude dedicar mi maximo tiempo y esfuerzo para poder hacerlo de la mejor forma, espero que le parezca interesante, perdone por mi irresponsabilidad, espero que me pueda tener en cuenta también.
+Profe, se que no recibes sin tener grupo, tal vez este trabajo esta un poco desorganizado, pero le pido perdón por tomarle mucho tiempo, tuve problemas con mi grupito, por lo que estoy trabajando solo, por eso me costo tanto este proyecto, sin embargo le pude dedicar mi maximo tiempo y esfuerzo para poder hacerlo de la mejor forma, espero que le parezca interesante, espero que me pueda tener en cuenta también.
 El documento del informe final se llama **“Reporte final.pdf”** y está ubicado en la **raíz del repositorio** (`./Reporte final.pdf`). Ese documento describe los objetivos, metodología, formulación matemática, resultados y conclusiones del proyecto de forma detallada. Adicionalmente, se incluyen las figuras y tablas generadas automáticamente en `reports/` y una versión en Markdown del informe en `reports/FINAL_REPORT.md`.
 
 ## Estructura
