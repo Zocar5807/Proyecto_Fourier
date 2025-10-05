@@ -1,0 +1,302 @@
+Proyecto Interactivo con IA y Cálculo
+Multivariable
+Propósito general. Integrar técnicas de procesamiento de imágenes (gradientes, ltros
+y segmentación) con integrales dobles para cuanticar propiedades de regiones en imágenes reales o sintéticas. Se espera que los estudiantes articulen la parte computacional
+con la interpretación matemática y el contexto (multimedia o biomédico), apoyándose en
+IA (p. ej., ChatGPT) para aclarar conceptos, comparar enfoques y justicar decisiones.
+Modalidad. Trabajo en equipos de 3 a 5 estudiantes.
+Entregable. Informe en PDF + códigos (Python/MATLAB) bien comentados + anexos
+(imágenes/guras).
+Sugerencia. Mantenga un diario breve de interacción con IA (principales preguntas y
+cómo inuyeron en sus decisiones).
+Opción 1. Mapeo de Curvas de Nivel en Ingeniería Multimedia con Sobel
+Contexto. Se trabaja sobre una imagen en escala de grises f : Ω ⊂ R
+2 → [0, 1] que
+representa un mapa de alturas visuales del escenario de un videojuego (texturas, relieve
+estilizado o mapa de heightmap). Las curvas de nivel de f se usan para entender el
+contorno; el ltro de Sobel estima gradientes y bordes (detalle visual).
+Objetivos especícos
+1. Implementar el ltro de Sobel para estimar ∂f/∂x y ∂f/∂y y la magnitud de gradiente G.
+2. Construir y utilizar integrales dobles para cuanticar energía de bordes, intensidad
+promedio y volumen visual en regiones de interés.
+3. Interpretar cuantitativamente los resultados para toma de decisiones de renderizado/optimización en el escenario del videojuego.
+Datos y convenciones
+Considere una imagen discreta f[i, j] ∈ [0, 1] de tamaño M × N con paso espacial
+uniforme ∆x, ∆y > 0. Use los núcleos de Sobel:
+Sx =
+
+
+−1 0 1
+−2 0 2
+−1 0 1
+
+ , Sy =
+
+
+−1 −2 −1
+0 0 0
+1 2 1
+
+ .
+Dena
+fx = f ∗ Sx, fy = f ∗ Sy, G =
+q
+f
+2
+x + f
+2
+y
+.
+Sea R ⊂ Ω una región del juego (p. ej., una máscara binaria M[i, j] ∈ {0, 1}).
+1
+Ejercicios guiados (entregables mínimos)
+1. Energía total de bordes en una región (coherente con Sobel)
+Dena la energía visual en R:
+E(R) = Z Z
+R
+G(x, y) dA ≈
+X
+(i,j)∈R
+G[i, j] ∆x ∆y.
+Tareas.
+Implemente Sobel y calcule G.
+Seleccione dos regiones R1, R2 del mapa (p. ej., zona rocosa vs. zona plana).
+Estime E(R1) y E(R2) y discuta su relación con detalle visual (zonas a renderizar
+con mayor resolución).
+2. Intensidad promedio e iluminación local
+La intensidad promedio en R:
+¯I(R) = 1
+A(R)
+Z Z
+R
+f(x, y) dA, A(R) = Z Z
+R
+1 dA ≈ (#R) ∆x ∆y.
+Tareas.
+Calcule A(R) y ¯I(R) para R1 y R2.
+Proponga una regla de iluminación: si ¯I(R) < τ (umbral), aplicar textura nocturna/sombra; de lo contrario, textura brillante.
+Justique la elección de τ con base en histogramas o percentiles de f.
+3. Volumen visual (carga gráca) en un sector
+Interprete f como mapa de alturas: el volumen visual en R es
+V (R) = Z Z
+R
+f(x, y) dA ≈
+X
+(i,j)∈R
+f[i, j] ∆x ∆y.
+Tareas.
+Compare V (R1) y V (R2) y discuta la carga gráca/memoria asociada.
+Proponga una política de LOD (Level of Detail) que combine E(R) y V (R):
+score(R) = α
+E(R)
+m´ax E
++ β
+V (R)
+m´ax V
+,
+con α, β ∈ [0, 1], α + β = 1. Dena cómo priorizar recursos según score(R).
+4. Curvas de nivel y áreas delimitadas
+Genere curvas de nivel de f para niveles L = {c1, . . . , ck} y seleccione una curva cerrada
+que induzca una región Rc. Estime:
+A(Rc) ≈ (#Rc) ∆x ∆y, V (Rc) ≈
+X
+(i,j)∈Rc
+f[i, j] ∆x ∆y.
+Tareas.
+Explique cómo cambia A(Rc) al variar c (crecimiento/disminución de zonas jugables).
+Conecte V (Rc) con decisiones de gameplay (p. ej., colocar recursos en valles/crestas).
+2
+Criterios de evaluación sugeridos
+Correcta implementación de Sobel y cálculo de G (20 %).
+Formulación y cómputo de integrales dobles (discretización) en R (25 %).
+Diseño y justicación de reglas (iluminación/LOD) basadas en E,
+¯I y V (25 %).
+Claridad del informe, guras y discusión crítica (20 %).
+Uso reexivo de IA (bitácora breve y decisiones informadas) (10 %).
+Opción 2. Segmentación de Células en Imágenes Biomédicas
+Contexto. A partir de imágenes de microscopía en escala de grises, se segmentan células
+para analizar área e intensidad como indicadores de tamaño y actividad biológica (p. ej.,
+uorescencia).
+Objetivos especícos
+1. Implementar un pipeline básico de segmentación (preprocesamiento, gradientes/detección
+de bordes, umbralización y limpieza morfológica).
+2. Usar integrales dobles para cuanticar área, intensidad acumulada e intensidad promedio de células segmentadas.
+3. Comparar células entre sí y discutir hallazgos con criterio biomédico básico (sin perder
+la coherencia con el procesamiento de imagen).
+Datos y convenciones
+Considere f : Ω → [0, 1] (imagen), y una máscara binaria M[i, j] ∈ {0, 1} que dene
+R = {(i, j) : M[i, j] = 1} como la célula segmentada. Mantenga ∆x, ∆y como pasos
+espaciales.
+Ejercicios guiados (entregables mínimos)
+1. Área celular
+El área de la célula R es
+A(R) = Z Z
+R
+1 dA ≈ .
+Tareas.
+Reporte A(R) para al menos tres células diferentes.
+Discuta posibles fuentes de sesgo (sobresegmentación/subsegmentación) y cómo mitigarlas.
+3
+2. Intensidad acumulada y promedio
+Dena
+I(R) = Z Z
+R
+f(x, y) dA ≈
+X
+(i,j)∈R
+f[i, j] ∆x ∆y, ¯I(R) = I(R)
+A(R)
+.
+Tareas.
+Calcule I(R) y ¯I(R) para las mismas células del punto anterior.
+Interprete I como carga de marcador y ¯I como densidad de marcador (actividad
+puntual).
+3. Comparación entre células y tabla resumen
+Para células R1, . . . , Rn (ideal n ≥ 5), construya la tabla:
+Celk : Ak, Ik,
+¯Ik, k = 1, . . . , n.
+Tareas.
+Identique outliers (por tamaño o intensidad).
+Proponga un criterio de preclasicación (normal/anómala) basado en umbrales de
+A y/o ¯I y justifíquelo (percentiles o z-scores).
+4. Control de calidad del pipeline
+Tareas.
+Varíe un parámetro de segmentación (p. ej., umbral) y observe la sensibilidad de A
+e I.
+Justique la conguración nal elegida con 12 guras antes/después.
+Criterios de evaluación
+Segmentación funcional y reproducible (20 %).
+Cálculo correcto de A, I y ¯I (integrales dobles discretas) (25 %).
+Análisis comparativo y criterio de preclasicación (25 %).
+Claridad del informe, guras y discusión crítica (20 %).
+Uso reexivo de IA (bitácora/decisiones) (10 %).
+1. Opción 3
+Proyecto Interactivo con IA y Transformada
+de Fourier
+Curso de Cálculo Multivariable
+4
+Propósito general. Aplicar la Transformada de Fourier 2D al análisis de imágenes en
+escala de grises, interpretando su descomposición en frecuencias espaciales y cuanticando
+información mediante integrales dobles. Se busca que los estudiantes comprendan cómo
+la matemática subyacente se conecta con aplicaciones prácticas en ingeniería multimedia,
+compresión de imágenes y ltrado digital.
+Contexto
+La Transformada de Fourier permite representar una imagen f(x, y) en términos de
+sus frecuencias espaciales. - Las bajas frecuencias corresponden a cambios suaves (fondo,
+formas grandes). - Las altas frecuencias representan cambios bruscos (bordes, detalles
+nos, ruido).
+El análisis en el dominio de la frecuencia es útil para: - Mejorar la calidad de imágenes. - Eliminar ruido. - Reducir tamaño de almacenamiento (compresión). - Resaltar
+características especícas en aplicaciones biomédicas y multimedia.
+Objetivos especícos
+1. Implementar la Transformada de Fourier 2D en imágenes en escala de grises.
+2. Analizar el espectro de frecuencias y diferenciar entre bajas y altas frecuencias.
+3. Usar integrales dobles para calcular la energía de diferentes zonas del espectro.
+4. Explorar aplicaciones: ltrado de ruido y compresión de imágenes.
+Ejercicios guiados
+1. Transformada de Fourier de una imagen
+La transformada bidimensional de una imagen f(x, y) se dene como:
+F(u, v) = Z Z
+R2
+f(x, y) e
+−i2π(ux+vy)
+dx dy.
+Tareas prácticas:
+Calcula F(u, v) con ayuda de Python/MATLAB.
+Graca el espectro de magnitudes |F(u, v)|.
+Explica: ¾por qué la mayor parte de la energía se concentra en el centro del espectro?
+2. Energía en bajas y altas frecuencias
+La energía total de la imagen en el dominio de Fourier es:
+E =
+Z Z |F(u, v)|
+2
+du dv.
+Tareas prácticas:
+5
+Divide el espectro en dos regiones: Rb (bajas frecuencias, centro) y Ra (altas frecuencias, periferia).
+Calcula:
+Eb =
+Z Z
+Rb
+|F(u, v)|
+2
+du dv, Ea =
+Z Z
+Ra
+|F(u, v)|
+2
+du dv.
+Compara Eb y Ea. ¾Qué tipo de información (suave o detallada) predomina en tu
+imagen?
+3. Filtrado en Fourier
+Un ltro pasa-bajas conserva bajas frecuencias y elimina altas. Un ltro pasa-altas
+hace lo contrario.
+Tareas prácticas:
+Implementa un ltro pasa-bajas y reconstruye la imagen aplicando la transformada
+inversa.
+Repite con un ltro pasa-altas.
+Compara las imágenes: ¾qué detalles se perdieron o se resaltaron?
+4. Compresión de imágenes
+Al mantener solo una fracción α de los coecientes más signicativos en Fourier, obtenemos una versión comprimida.
+Tareas prácticas:
+Conserva el 30 %, 50 % y 70 % de frecuencias principales.
+Reconstruye la imagen en cada caso.
+Calcula el error cuadrático medio (MSE) entre la imagen original y la reconstruida.
+Discute: ¾qué nivel de compresión ofrece mejor balance entre calidad y tamaño?
+Interpretación y aplicaciones
+En multimedia y videojuegos: optimización del rendimiento al controlar qué frecuencias conservar.
+En biomedicina: ltrado de ruido en imágenes de microscopía y realce de estructuras
+especícas.
+En compresión: reducción del tamaño de imágenes sin perder demasiada calidad visual.
+6
+Entregables
+1. Informe en PDF con: metodología, fórmulas empleadas, resultados grácos y discusión.
+2. Código en Python/MATLAB con comentarios claros.
+3. Grácas: espectros de Fourier, comparaciones entre ltrados y reconstrucciones comprimidas.
+4. Reexión sobre el papel de la IA en el desarrollo del proyecto.
+Requisitos comunes del informe
+1. Resumen ejecutivo (máx. 200 palabras): problema, datos, métricas integrales usadas
+y principales hallazgos.
+2. Metodología: descripción del pipeline (con diagrama simple), parámetros clave y
+justicación breve.
+3. Formulación matemática: escriba las integrales dobles relevantes.
+4. Resultados: tablas y guras con E, A, I,
+¯I (según la opción).
+5. Discusión: interpretación contextual (multimedia o biomédica), limitaciones, riesgos
+y mejoras.
+6. Bitácora de IA: 58 líneas con las consultas más útiles y cómo afectaron el diseño/validación.
+7. Conclusiones y trabajo futuro (máx. 1 página).
+Rúbrica global (orientativa)
+Criterio Descripción
+Correctitud técnica Implementación de Sobel/segmentación, cálculo de integrales discretas y reproducibilidad.
+Razonamiento cuantitativo
+Uso coherente de E, A, I,
+¯I; umbrales y comparaciones
+justicadas.
+Interpretación contextual
+Decisiones de renderizado/LOD (Opción 1) o preclasi-
+cación biomédica (Opción 2).
+Comunicación Informe claro, guras legibles, tablas comparables y conclusiones bien hiladas.
+Uso de IA Evidencia de apoyo para decisiones, no sustitución acrítica del criterio académico.
+7
+Anexo matemático (referencia rápida)
+Sobel y gradiente: fx = f ∗ Sx, fy = f ∗ Sy, G =
+p
+f
+2
+x + f
+2
+y
+.
+Integrales dobles (continuo): A(R) = RR
+R
+1 dA, I(R) = RR
+R
+f dA, ¯I(R) = I(R)/A(R).
+Aproximación discreta: Z Z
+R
+g dA ≈
+X
+(i,j)∈R
+g[i, j] ∆x ∆y.
+Pistas de validación: compare sumas con distintas resoluciones y reporte el error
+relativo.

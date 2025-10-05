@@ -2,9 +2,10 @@ numpy
 scipy
 matplotlib
 scikit-image
-imageio
-jupyter
+pandas
 tqdm
-opencv-python
+imageio
 pillow
-scikit-learn
+tabulate
+# Optional GPU/ML backend (commented):
+# torch
